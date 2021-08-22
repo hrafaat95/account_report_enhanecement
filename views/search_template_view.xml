@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="search_template_initial_balance">
+            <t t-if="options.get('show_initial_balance')">
+                <input type="checkbox" id="show_initial_balance" name="show_initial_balance" t-att-checked="options.get('initial_balance')"/>
+                <label for="show_initial_balance"> Show Initial Balance</label>
+            </t>
+        </template>
+
+        <template id="search_template_initialbalance_filter" inherit_id="account_reports.search_template">
+            <xpath expr="//div[@id='extra_options_dropdown']" position="after">
+                <t t-call="account_report_enhanecement.search_template_initial_balance" />
+            </xpath>
+        </template>
+
+        <template id="account_reports.main_table_header">
+            <t t-if="len(lines.get('columns_header', [])) > 1">
+                <thead class="o_account_reports_header_hierarchy">
+                    <t t-foreach="lines.get('columns_header')" t-as="header_line">
+                        <tr>
+                            <t t-foreach="header_line" t-as="header">
+                                <th t-att-colspan="header.get('colspan')" t-att-title="header.get('title')" t-att-data-toggle="header.get('data-toggle')">
+                                    <t t-esc="header.get('name')" />
+                                </th>
+                            </t>
+                        </tr>
+                    </t>
+                    <!-- Empty <tr> to create a bottom border on the above
+                         <tr>. Necessary due to "border-collapse: collapse;" on the
+                         table. -->
+                    <tr><th t-att-colspan="len(lines.get('columns_header')[-1])"></th></tr>
+                </thead>
+            </t>
+            <t t-else="">
+                <thead>
+                    <tr class="o_account_report_column_header">
+                        <t t-foreach="lines.get('columns_header')[0]" t-as="column_header">
+                            <t t-if="column_header.get('name') != 'Initial Balance' or  options.get('initial_balance') ">
+                                <th t-att-class="'o_account_report_column_header ' + (column_header.get('class', ''))" t-att-style="column_header.get('style', '')"
+                                    t-att-title="column_header.get('title')">
+                                    <t t-raw="column_header.get('name')"/>
+                                </th>
+                            </t>
+                        </t>
+                    </tr>
+                </thead>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>
